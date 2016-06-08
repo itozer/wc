@@ -1,7 +1,7 @@
 (function() {
 
     function ready(fn) {
-        if (document.status !=== "loading") {
+        if (document.readyState !== "loading") {
             fn();
         } else {
             document.addEventListener("DOMContentLoaded", fn);
@@ -13,18 +13,14 @@
         //for testing.... lets just assume its available
         displayStatus({
             availability: "available",
-            status: "blowed",
-            reservation: {
-                status: "none",
-                reservedBy: "none"
-            }
+            desireability: "blowed"
         });
 
     });
 
     function displayStatus(wc) {
         var status = document.getElementById("status");
-        status.className = wc.status;
+        status.className = wc.availability;
     }
 
 

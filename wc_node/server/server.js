@@ -3,8 +3,7 @@ var bodyParser = require('body-parser');
 var app = express();
 var _ = require('lodash');
 var morgan = require('morgan');
-
-var wc = require('./wc');
+var wcRouter = require('./wc');
 
 app.use(morgan('dev'))
 app.use(express.static('client'));
