@@ -9,20 +9,43 @@
     }
 
     ready(function() {
-        //first get the current status of the bathroomroom and display
-        //for testing.... lets just assume its available
-        displayStatus({
-            availability: "available",
-            desireability: "blowed"
+        get("http://wc.com:3000/wc").then(function(resp) {
+            console.log(resp);
+            displayStatus(JSON.parse(resp));
+        }).catch(function(e) {
+            console.log("womp wompp");
         });
-
     });
 
     function displayStatus(wc) {
-        var status = document.getElementById("status");
-        status.className = wc.availability;
+        var display = document.getElementById("status"), s, status = "";
+        for (s in wc) {
+            status += wc[s] + " ";
+        }
+        console.log(status);
+        display.className = status;
     }
 
+    function get(url) {
+        return new Promise(function(resolve, reject) {
+            var req = new XMLHttpRequest();
+            req.open('GET', url);
+
+            req.onreadystatechange = function(){
+            	if(req.readyState === 4 && req.status === 200){
+                    resolve(req.response);
+                } else if (req.readyState ===4 && req.status !== 200) {
+                    reject(req.statusText);
+                }
+            }
+
+            req.onerror = function() {
+                reject(Error("Network Error"));
+            }
+
+            req.send();
+        });
+    }
 
     function hasClass(el, className) {
         if (el.classList) {

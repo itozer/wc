@@ -1,8 +1,10 @@
 var _ = require('lodash');
 var wcRouter = require('express').Router();
 
-var lions = [];
-var id = 0;
+var displayStatus = {
+    availability: "available",
+    desireability: "blowed"
+};
 
 var updateId = function(req, res, next) {
   if (!req.body.id) {
@@ -24,7 +26,8 @@ wcRouter.param('id', function(req, res, next, id) {
 });
 
 wcRouter.get('/', function(req, res){
-  res.json(lions);
+console.log("get called");
+  res.json(displayStatus);
 });
 
 wcRouter.get('/:id', function(req, res){
