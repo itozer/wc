@@ -12,26 +12,24 @@
 
 <body id="status">
 
-<div id="reservation">
-	<div class="button" onclick="javascript:makeReservation()">On My Way</div>
-	<!--
-	<form name="reservation" action="#">
-		<input type="text" name="reservedBy" id="reservedBy" placeholder="Declare Your Intentions For The Throne">
-	</form>
-	-->
-</div>
+<div id="action_bar">
+	<div id="vacant_timer"></div>
 
-<div id="blowedWrapper">
-	<div class="button" onclick="javascript:reportBlowed()">Report Blowed</div>
+	<div id="reserved_button" class="button" onclick="javascript:makeReservation()">Make Reservation</div>
+	<div id="blowed_button" class="button" onclick="javascript:reportBlowed()">Report Blowed</div>
+	<div id="alert_button" class="button" onclick="javascript:alertWhenFree()">Alert When Free&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+	<div style="clear: both"></div>
 </div>
 
 <div id="wrapper">
-	<div id="stinkLines" class="clean"><img src="images/stink_lines.png" width="500px" height="486px" alt="blowed" /></div>
+	<!--<div id="stink_lines" class="hidden"><img src="images/stink_lines.png" width="500px" height="486px" alt="blowed" /></div>-->
 	<div id="mens_icon">
-		<img id="mens_img" src="images/mens_icon.png" width="169px" height="463px" alt="mens" />
+		<div id="mens_img"><img src="images/blank.gif" width="169px" height="463px" alt="" /></div>
+		<!--<img id="mens_img" src="images/mens_icon.png" width="169px" height="463px" alt="mens" />-->
 		<h2 id="status_text">text</h2>
 	</div>
 </div>
+
 
 </body>
 </html>
