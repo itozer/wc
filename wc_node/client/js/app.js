@@ -1,5 +1,7 @@
 (function() {
 
+    var socket;
+
     function ready(fn) {
         if (document.readyState !== "loading") {
             fn();
@@ -9,12 +11,23 @@
     }
 
     ready(function() {
+        /*
         get("http://wc.com:3000/wc").then(function(resp) {
             console.log(resp);
             displayStatus(JSON.parse(resp));
         }).catch(function(e) {
             console.log("womp wompp");
         });
+        */
+
+        socket = io();
+
+        //websocket!
+        socket.on('status', function(msg) {
+            displayStatus(JSON.parse(msg));
+        });
+
+
     });
 
     function displayStatus(wc) {
