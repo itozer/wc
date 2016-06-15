@@ -1,6 +1,7 @@
 (function() {
 
-    var socket, selectedBathroom = "bathroom-1";
+    var wc,       //holds state for all bathrooms
+        socket    //web socket (socket.io)
 
     function ready(fn) {
         if (document.readyState !== "loading") {
@@ -11,62 +12,43 @@
     }
 
     ready(function() {
-        var b, bathrooms, i;
-        /*
-        get("http://wc.com:3000/wc").then(function(resp) {
-            console.log(resp);
-            displayStatus(JSON.parse(resp));
-        }).catch(function(e) {
-            console.log("womp wompp");
-        });
-        */
-
-        addClass(document.getElementById(selectedBathroom), "active");
+        var bathrooms, i;
 
         //add click event listeners to bathroom thumbs
         bathrooms = document.querySelectorAll("#bathroom-nav div");
-        console.log(bathrooms);
         for (i = 0; i < bathrooms.length; i++) {
             setClickEvent(bathrooms[i]);
         }
 
-        //websocket!
         socket = io();
 
         socket.emit('msg', 'msg');
 
         socket.on('status', function(msg) {
-            displayStatus(JSON.parse(msg));
+            wc = JSON.parse(msg);
+            updateStatus();
         });
     });
 
     function setClickEvent(el) {
         el.addEventListener("click", function() {
-            removeClass(document.querySelectorAll("#bathroom-nav div.active")[0], "active");
+            removeClass(document.querySelector("#bathroom-nav div.active"), "active");
             addClass(el, "active");
-            if (el.classList.indexOf("available") !== -1) {
-                document.querySelector("body").classList = "available";
-            } else if (el.classList.indexOf("occupied") !== -1) {
-                document.querySelector("body").classList = "occupied";
-            } else if (el.classList.indexOf("reserved") !== -1) {
-                document.querySelector("body").classList = "reserved";
-            }
+            document.body.className = wc[el.id].availability;
         });
     }
 
-    function displayStatus(wc) {
-        var bathroom, display = document.getElementById("status"), el, s, status = "";
+    function updateStatus() {
+        var bathroom, classList, el, status;
 
         for (bathroom in wc) {
-            console.log(bathroom);
             el = document.getElementById(bathroom);
-            el.className.indexOf("active") === -1? status = "": status = "active";
-            for (s in wc[bathroom]) {
-                status += " " + wc[bathroom][s];
+            el.className.indexOf("active") === -1? classList = "": classList = "active";
+            for (status in wc[bathroom]) {
+                classList += " " + wc[bathroom][status];
             }
-            console.log(status);
-            status += el.className;
-            el.className = status.trim();
+            classList += el.className;
+            el.className = classList.trim();
         }
     }
 

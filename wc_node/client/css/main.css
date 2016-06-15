@@ -52,6 +52,8 @@ body {
     background-position: center center;
     background-size: 12%;
     background-repeat: no-repeat;
+    border: 1px solid #ccc;
+    cursor: pointer;
 }
 
 #bathroom-nav > div {
