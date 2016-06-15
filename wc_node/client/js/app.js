@@ -34,6 +34,7 @@
         el.addEventListener("click", function() {
             removeClass(document.querySelector("#bathroom-nav div.active"), "active");
             addClass(el, "active");
+            addClass(el, "tada");
             document.body.className = wc[el.id].availability;
         });
     }
@@ -49,6 +50,7 @@
             }
             classList += el.className;
             el.className = classList.trim();
+            //addClass(document.querySelector(".animate"), "rubberBand");
         }
     }
 
