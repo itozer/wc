@@ -12,25 +12,41 @@ app.use(morgan('dev'))
 app.use(express.static('client'));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
-// this is called mounting. when ever a req comes in for
-// '/lion' we want to use this router
 app.use('/wc', wcRouter);
 
-
-/*app.get('/', function(req, res) {
+/*
+app.get('/', function(req, res) {
     //res.sendFile(__dirname + '/../client/index.html');
     res.sendFile('/home/isaac/development/wc/wc_node/client/index.html');
-});*/
+});
+*/
 
+var wc = {
+    "bathroom-1" : {
+        gender: "male",
+        availability: "available",
+        desireability: "blowed"
+    },
+    "bathroom-2" : {
+        gender: "male",
+        availability: "occupied",
+        desireability: "blowed"
+    },
+    "bathroom-3" : {
+        gender: "male",
+        availability: "reserved",
+        desireability: "blowed"
+    }
+}
 
 io.on('connection', function(socket) {
-    io.emit('status', wcRouter.displayStatus);
+    console.log('connection');
+    io.emit('status', JSON.stringify(wc));
 
     socket.on('user action', function(msg) {
         console.log('user action: ' + msg);
     });
 });
-
 
 app.use(function(err, req, res, next) {
   if (err) {
@@ -39,8 +55,6 @@ app.use(function(err, req, res, next) {
   }
 });
 
-
-
-
-app.listen(3000);
+/*app.listen(3000);*/
+http.listen(3000);
 console.log('on port 3000');

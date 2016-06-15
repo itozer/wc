@@ -1,10 +1,12 @@
 var _ = require('lodash');
 var wcRouter = require('express').Router();
 
+/*
 var displayStatus = {
     availability: "available",
     desireability: "blowed"
 };
+*/
 
 var updateId = function(req, res, next) {
   if (!req.body.id) {

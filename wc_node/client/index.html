@@ -5,12 +5,15 @@
 	<script src="js/main.js"></script>
 	<script type="text/javascript" src="js/app.js"></script>
     <script src="/socket.io/socket.io.js"></script>
+    <script src="../socket.io/socket.io.js"></script>
+    <script src="/../socket.io/socket.io.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/main.css">
 	<meta name="viewport" content="width=400, initial-scale=0.7">
 </head>
 
 <body id="status">
 
+<!--
 <div id="action_bar">
 	<div id="vacant_timer"></div>
 
@@ -21,13 +24,39 @@
 </div>
 
 <div id="wrapper">
-	<!--<div id="stink_lines" class="hidden"><img src="images/stink_lines.png" width="500px" height="486px" alt="blowed" /></div>-->
 	<div id="mens_icon">
 		<div id="mens_img"><img src="images/blank.gif" width="169px" height="463px" alt="" /></div>
-		<!--<img id="mens_img" src="images/mens_icon.png" width="169px" height="463px" alt="mens" />-->
 		<h2 id="status_text">text</h2>
 	</div>
 </div>
+-->
+
+    <div id="action-nav">
+        <div id="alert-button" class="action-button">Alert When Free</div>
+        <div id="blowed-button" class="action-button">Report Blowed</div>
+        <div id="reserved-button" class="action-button">Make Reservation</div>
+        <div id="show-stats" class="action-button">Make Reservation</div>
+    </div>
+
+    <div id="bathroom-nav">
+        <div id="bathroom-1" class="bathroom_thumb">
+            <div class="gender_icon"></div>
+        </div>
+        <p>bathroom 1</p>
+
+        <div id="bathroom-2" class="bathroom_thumb"></div>
+        <p>bathroom 2</p>
+
+        <div id="bathroom-3" class="bathroom_thumb"></div>
+        <p>bathroom 3</p>
+    </div>
+
+    <div id="info-panel">
+        <!--<div id="centered-content">
+    </div>-->
+        <div id="chat-bar"></div>
+    </div>
+
 
 
 </body>

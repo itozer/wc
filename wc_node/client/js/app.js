@@ -1,6 +1,6 @@
 (function() {
 
-    var socket;
+    var socket, selectedBathroom = "bathroom-1";
 
     function ready(fn) {
         if (document.readyState !== "loading") {
@@ -11,6 +11,7 @@
     }
 
     ready(function() {
+        var b, bathrooms, i;
         /*
         get("http://wc.com:3000/wc").then(function(resp) {
             console.log(resp);
@@ -20,23 +21,53 @@
         });
         */
 
-        socket = io();
+        addClass(document.getElementById(selectedBathroom), "active");
+
+        //add click event listeners to bathroom thumbs
+        bathrooms = document.querySelectorAll("#bathroom-nav div");
+        console.log(bathrooms);
+        for (i = 0; i < bathrooms.length; i++) {
+            setClickEvent(bathrooms[i]);
+        }
 
         //websocket!
+        socket = io();
+
+        socket.emit('msg', 'msg');
+
         socket.on('status', function(msg) {
             displayStatus(JSON.parse(msg));
         });
-
-
     });
 
+    function setClickEvent(el) {
+        el.addEventListener("click", function() {
+            removeClass(document.querySelectorAll("#bathroom-nav div.active")[0], "active");
+            addClass(el, "active");
+            if (el.classList.indexOf("available") !== -1) {
+                document.querySelector("body").classList = "available";
+            } else if (el.classList.indexOf("occupied") !== -1) {
+                document.querySelector("body").classList = "occupied";
+            } else if (el.classList.indexOf("reserved") !== -1) {
+                document.querySelector("body").classList = "reserved";
+            }
+        });
+    }
+
     function displayStatus(wc) {
-        var display = document.getElementById("status"), s, status = "";
-        for (s in wc) {
-            status += wc[s] + " ";
+        var bathroom, display = document.getElementById("status"), el, s, status = "";
+
+        for (bathroom in wc) {
+            console.log(bathroom);
+            el = document.getElementById(bathroom);
+            el.className.indexOf("active") === -1? status = "": status = "active";
+            for (s in wc[bathroom]) {
+                status += " " + wc[bathroom][s];
+            }
+            console.log(status);
+            status += el.className;
+            el.className = status.trim();
         }
-        console.log(status);
-        display.className = status;
     }
 
     function get(url) {
