@@ -46,6 +46,11 @@ io.on('connection', function(socket) {
     socket.on('update', function(msg) {
         console.log('update: ' + msg);
     });
+
+    socket.on('action', function(msg) {
+        console.log('action: ' + msg);
+    });
+
 });
 
 app.use(function(err, req, res, next) {

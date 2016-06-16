@@ -12,13 +12,19 @@
     }
 
     ready(function() {
-        var bathrooms, i;
+        var actions, bathrooms, i;
 
         //add click event listeners to bathroom thumbs
         bathrooms = document.querySelectorAll(".bathroom-thumb");
         for (i = 0; i < bathrooms.length; i++) {
-            setClickEvent(bathrooms[i]);
+            setBathroomThumbEvents(bathrooms[i]);
         }
+
+        actions = document.querySelectorAll(".action-button");
+        for (i = 0; i < actions.length; i++) {
+            setActionEvents(actions[i]);
+        }
+
 
         socket = io();
 
@@ -30,18 +36,25 @@
         });
     });
 
-    function setClickEvent(el) {
+    function setActionEvents(el) {
+      el.addEventListener("click", function() {
+        socket.emit('action', el.id);
+        //doAnimation(el.querySelector("p"), "pulse", function() {
+        doAnimation(el, "pulse", function() {
+          //do something?
+        })
+      });
+    }
+
+    function setBathroomThumbEvents(el) {
         el.addEventListener("click", function() {
             removeClass(document.querySelector("#bathroom-nav .active"), "active");
-            addClass(el, "active");
-            addClass(el, "animated");
-            addClass(el, "tada");
+            addClasses(el, "active animated tada");
             one(el, ['webkitAnimationEnd', 'mozAnimationEnd', 'MSAnimationEnd', 'oanimationend', 'animationend']).then(function(el) {
                 //do something
                 console.log("done animating");
                 console.log(el);
-                removeClass(el, "animated");
-                removeClass(el, "tada");
+                removeClasses(el, "animated tada");
             }).catch(function(e) {
                 console.log(e);
             });
@@ -72,6 +85,20 @@
 
 
         }
+    }
+
+    function doAnimation(el, animation, cb) {
+      addClasses(el, "animated " + animation);
+
+      //listen for when animation ends
+      one(el, ['webkitAnimationEnd', 'mozAnimationEnd', 'MSAnimationEnd', 'oanimationend', 'animationend']).then(function(el) {
+          console.log("done animating");
+          console.log(el);
+          removeClasses(el, "animated " + animation);
+          cb();
+      }).catch(function(e) {
+          console.log(e);
+      });
     }
 
     function get(url) {
@@ -111,6 +138,13 @@
         }
     }
 
+    function addClasses(el, classNames) {
+      var classes = classNames.split(" "), i;
+      for (i = 0; i < classes.length; i++) {
+        addClass(el, classes[i]);
+      }
+    }
+
     function removeClass(el, className) {
         if (el.classList) {
             el.classList.remove(className);
@@ -118,6 +152,13 @@
             var reg = new RegExp('(\\s|^)' + className + '(\\s|$)');
             el.className=el.className.replace(reg, ' ');
         }
+    }
+
+    function removeClasses(el, classNames) {
+      var classes = classNames.split(" "), i;
+      for (i = 0; i < classes.length; i++) {
+        removeClass(el, classes[i]);
+      }
     }
 
     function one(el, eventArray) {
@@ -130,10 +171,10 @@
                 }
 
                 function addEvent(toAdd) {
-                    el.addEventListener(toAdd, addIt);
+                    el.addEventListener(toAdd, animationDone);
                 }
 
-                function addIt() {
+                function animationDone() {
                     var j;
                     for (j = 0; j < eventArray.length; j++) {
                         removeEvent(eventArray[j]);
@@ -142,7 +183,7 @@
                 }
 
                 function removeEvent(toRemove) {
-                    el.removeEventListener(toRemove, addIt);
+                    el.removeEventListener(toRemove, animationDone);
                 }
 
             } catch(e) {
