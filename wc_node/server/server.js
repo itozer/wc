@@ -51,6 +51,11 @@ io.on('connection', function(socket) {
         console.log('action: ' + msg);
     });
 
+    socket.on('userMessage', function(msg) {
+        console.log('message: ' + msg);
+        io.emit('userMessage', msg);
+    });
+
 });
 
 app.use(function(err, req, res, next) {

@@ -7,7 +7,8 @@
 	<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 	<script src="js/main.js"></script>
 	<script type="text/javascript" src="js/app.js"></script>
-  <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="js/polyfills/es6-promise.min.js"></script>
 	<meta name="viewport" content="width=400, initial-scale=0.7">
 </head>
 
@@ -32,6 +33,7 @@
 -->
 
     <div id="action-nav">
+        <h1 class="animated tada">SkyDump <span style="font-size: 50%;">2.0</span></h1>
         <div id="alert-button" class="action-button"><p>Alert When Free</p></div>
         <div id="blowed-button" class="action-button"><p>Report Blowed</p></div>
         <div id="reserved-button" class="action-button"><p>Make Reservation</p></div>
@@ -41,7 +43,7 @@
     <div id="bathroom-nav">
         <div id="bathroom-1">
             <div class="bathroom-thumb active"></div>
-            <p class="animated rubberBand">Bathroom 1</p>
+            <p>Bathroom 1</p>
         </div>
 
         <div id="bathroom-2">
@@ -56,12 +58,15 @@
     </div>
 
     <div id="info-panel">
-        <!--<div id="centered-content">
-    </div>-->
-        <div id="chat-bar"></div>
+
+
+
+
+        <div id="chat-container"></div>
+        <div id="chat-bar">
+            <input id="userMessage" type="text" name="message" placeholder="Write Message..."></input>
+        </div>
     </div>
-
-
 
 </body>
 </html>

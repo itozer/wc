@@ -14,6 +14,8 @@
     ready(function() {
         var actions, bathrooms, i;
 
+        socket = io();
+
         //add click event listeners to bathroom thumbs
         bathrooms = document.querySelectorAll(".bathroom-thumb");
         for (i = 0; i < bathrooms.length; i++) {
@@ -25,17 +27,29 @@
             setActionEvents(actions[i]);
         }
 
+        //message bar input
+        document.getElementById("userMessage").addEventListener("keydown", function(e) {
+            if (e.keyCode === 13) {
+                if (this.value.trim().length > 0) {
+                    socket.emit('userMessage', this.value);
+                    this.value = "";
+                }
+            }
+        });
 
-        socket = io();
+        //message response socket
+        socket.on('userMessage', function(msg) {
+            document.getElementById('chat-container').insertAdjacentHTML('beforeend', "<p class='animated rubberBand'><span style='font-size:10px;'>"+ (new Date()).toLocaleTimeString() + ":</span> " + msg + "</p>");
+        });
 
-        socket.emit('msg', 'msg');
-
+        //app init socket
         socket.on('init', function(msg) {
             wc = JSON.parse(msg);
             updateStatus();
         });
     });
 
+    //left nav click event
     function setActionEvents(el) {
       el.addEventListener("click", function() {
         socket.emit('action', el.id);
@@ -83,7 +97,6 @@
                 console.log(e);
             });
 
-
         }
     }
 
@@ -98,6 +111,7 @@
           cb();
       }).catch(function(e) {
           console.log(e);
+          cb();
       });
     }
 
