@@ -41,10 +41,10 @@ var wc = {
 
 io.on('connection', function(socket) {
     console.log('connection');
-    io.emit('status', JSON.stringify(wc));
+    io.emit('init', JSON.stringify(wc));
 
-    socket.on('user action', function(msg) {
-        console.log('user action: ' + msg);
+    socket.on('update', function(msg) {
+        console.log('update: ' + msg);
     });
 });
 
