@@ -56,6 +56,10 @@ h1 {
     overflow-x: hidden;
 }
 
+#bathroom-nav div {
+    position: relative;
+}
+
 /*thumb*/
 #bathroom-nav div div {
     width: 220px;
@@ -76,6 +80,15 @@ h1 {
     border: 1px solid #fff;
 }
 
+/*active triangle indicator*/
+#bathroom-nav-active {
+	width: 0;
+    height: 0;
+    border-top: 50px solid transparent;
+    border-left: 100px solid red;
+    border-bottom: 50px solid transparent;
+}
+
 #bathroom-nav p {
     margin: 1% 0 3% 0;
     text-align: center;
@@ -92,11 +105,12 @@ h1 {
 #chat-container {
     position: absolute;
     bottom: 50px;
-    right: 0;
+    left: 0;
     font-size: 14px;
     color: #fff;
-    text-align: right;
-    padding: 0 10px 4px 0;
+    text-align: left;
+    /*padding: 0 10px 4px 0;*/
+    padding: 0 0 10px 10px;
 }
 
 #chat-container p {
