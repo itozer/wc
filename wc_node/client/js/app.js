@@ -40,7 +40,7 @@
         //message response socket
         socket.on('userMessage', function(msg) {
             //document.getElementById('chat-container').insertAdjacentHTML('beforeend', "<p class='animated rubberBand'><span style='font-size:10px;'>"+ (new Date()).toLocaleTimeString() + ":</span> " + msg + "</p>");
-            document.getElementById('chat-container').insertAdjacentHTML('beforeend', "<p class='animated rubberBand'>" + msg + " <span style='font-size:10px;'>(" + (new Date()).toLocaleTimeString() + ")</span></p>");
+            document.getElementById('chat-container').insertAdjacentHTML('beforeend', "<p class='animated fadeInUp'>" + msg + " <span style='font-size:10px;'>(" + (new Date()).toLocaleTimeString() + ")</span></p>");
         });
 
         //app init socket
