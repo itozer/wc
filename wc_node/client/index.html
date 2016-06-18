@@ -41,35 +41,38 @@
     </div>
 
     <div id="bathroom-nav">
-        <div id="bathroom-1">
-            <div class="bathroom-thumb active"></div>
+        <!--<div id="bathroom-nav-active"></div>-->
+
+        <div id="bathroom-1" class="bathroom-thumb-wrapper active">
+            <div class="bathroom-thumb"></div>
             <p>Bathroom 1</p>
         </div>
 
-        <div id="bathroom-2">
+        <div id="bathroom-2" class="bathroom-thumb-wrapper">
             <div class="bathroom-thumb"></div>
-            <p class="animated">Bathroom 2</p>
+            <p>Bathroom 2</p>
         </div>
 
-        <div id="bathroom-3">
+        <div id="bathroom-3" class="bathroom-thumb-wrapper">
             <div class="bathroom-thumb"></div>
-            <p class="animated">Bathroom 3</p>
+            <p>Bathroom 3</p>
         </div>
     </div>
 
     <div id="info-panel">
 
 				<div id="center-content">
-					<p id="center-status">Available</p>
-					<p id="longest-dump">Longest Dump Today: 12:34</p>
-					<p id="collective-time-today">54:16</p>
 					<div id="center-gender"></div>
+					<h2 id="center-status">Available for <span id="vacant-timer">00:00</span></h2>
+					<h3 id="longest-dump">Longest Dump Today: 12:34</h3>
+					<h3 id="collective-time-today">Cumulative time: 54:16</h3>
 				</div>
 
         <div id="chat-container"></div>
-        <div id="chat-bar">
-            <input id="userMessage" type="text" name="message" placeholder="Write Message..."></input>
-        </div>
+    </div>
+
+    <div id="chat-bar">
+        <input id="userMessage" type="text" name="message" placeholder="Write Message..."></input>
     </div>
 
 </body>

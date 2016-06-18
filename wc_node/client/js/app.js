@@ -1,7 +1,9 @@
 (function() {
+    "use strict";
 
     var wc,       //holds state for all bathrooms
-        socket    //web socket (socket.io)
+        socket,    //web socket (socket.io)
+        vacantTimer;
 
     function ready(fn) {
         if (document.readyState !== "loading") {
@@ -17,7 +19,8 @@
         socket = io();
 
         //add click event listeners to bathroom thumbs
-        bathrooms = document.querySelectorAll(".bathroom-thumb");
+        //bathrooms = document.querySelectorAll(".bathroom-thumb");
+        bathrooms = document.querySelectorAll(".bathroom-thumb-wrapper");
         for (i = 0; i < bathrooms.length; i++) {
             setBathroomThumbEvents(bathrooms[i]);
         }
@@ -48,6 +51,8 @@
             wc = JSON.parse(msg);
             updateStatus();
         });
+
+        setVacantTimer(0);
     });
 
     //left nav click event
@@ -63,9 +68,13 @@
 
     function setBathroomThumbEvents(el) {
         el.addEventListener("click", function() {
-            removeClass(document.querySelector("#bathroom-nav .active"), "active");
-            addClasses(el, "active animated tada");
-            one(el, ['webkitAnimationEnd', 'mozAnimationEnd', 'MSAnimationEnd', 'oanimationend', 'animationend']).then(function(el) {
+            var thumb = el.querySelector(".bathroom-thumb"), title = el.querySelector("p");
+            //removeClass(document.querySelector("#bathroom-nav .active"), "active");
+            removeClass(document.querySelector(".active"), "active");
+            //addClasses(el, "active animated tada");
+            addClass(el, "active");
+            addClasses(thumb, "animated tada");
+            one(thumb, ['webkitAnimationEnd', 'mozAnimationEnd', 'MSAnimationEnd', 'oanimationend', 'animationend']).then(function(el) {
                 //do something
                 console.log("done animating");
                 console.log(el);
@@ -79,7 +88,7 @@
     }
 
     function updateStatus() {
-        var bathroom, classList, status, thumb;
+        var bathroom, classList, status, thumb, title;
 
         for (bathroom in wc) {
             //update visual status of thumb
@@ -135,6 +144,33 @@
 
             req.send();
         });
+    }
+
+    function setVacantTimer(totalSecondsPassed) {
+        vacantTimer = setInterval(function () {
+            var days, hours, minutes, seconds, secondsPassed, timePassed;
+
+            var days = parseInt(totalSecondsPassed / 86400);
+            var secondsPassed = parseInt(totalSecondsPassed % 86400);
+            var hours = parseInt(secondsPassed / 3600);
+            var secondsPassed = parseInt(secondsPassed % 3600);
+            var minutes = parseInt(secondsPassed / 60);
+            var seconds = parseInt(secondsPassed % 60);
+            var minutes = minutes < 10? "0" + minutes: minutes;
+            var seconds = seconds < 10? "0" + seconds: seconds;
+
+            if (days > 0) {
+                timePassed = days + ":" + hours + ":" + minutes + ":" + seconds;
+            } else if (hours > 0) {
+                timePassed = hours + ":" + minutes + ":" + seconds;
+            } else {
+                timePassed = minutes + ":" + seconds;
+            }
+
+            document.getElementById("vacant-timer").innerHTML = timePassed;
+            totalSecondsPassed++;
+
+        }, 1000);
     }
 
     function hasClass(el, className) {
