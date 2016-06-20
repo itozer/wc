@@ -19,8 +19,8 @@
         socket = io();
 
         //add click event listeners to bathroom thumbs
-        //bathrooms = document.querySelectorAll(".bathroom-thumb");
-        bathrooms = document.querySelectorAll(".bathroom-thumb-wrapper");
+        bathrooms = document.querySelectorAll(".bathroom-thumb");
+        //bathrooms = document.querySelectorAll(".bathroom-thumb-wrapper");
         for (i = 0; i < bathrooms.length; i++) {
             setBathroomThumbEvents(bathrooms[i]);
         }
@@ -69,12 +69,12 @@
     function setBathroomThumbEvents(el) {
         el.addEventListener("click", function() {
             var thumb = el.querySelector(".bathroom-thumb"), title = el.querySelector("p");
-            //removeClass(document.querySelector("#bathroom-nav .active"), "active");
-            removeClass(document.querySelector(".active"), "active");
-            //addClasses(el, "active animated tada");
-            addClass(el, "active");
-            addClasses(thumb, "animated tada");
-            one(thumb, ['webkitAnimationEnd', 'mozAnimationEnd', 'MSAnimationEnd', 'oanimationend', 'animationend']).then(function(el) {
+            removeClass(document.querySelector("#bathroom-nav .active"), "active");
+            //removeClass(document.querySelector(".active"), "active");
+            addClasses(el, "active animated tada");
+            /*addClass(el, "active");
+            addClasses(thumb, "animated tada");*/
+            one(el, ['webkitAnimationEnd', 'mozAnimationEnd', 'MSAnimationEnd', 'oanimationend', 'animationend']).then(function(el) {
                 //do something
                 console.log("done animating");
                 console.log(el);
