@@ -22,26 +22,51 @@ app.get('/', function(req, res) {
 */
 
 var wc = {
-    "bathroom-1" : {
-        gender: "male",
-        availability: "available",
-        desireability: "blowed"
+    bathrooms: {
+        b1 : {
+            id: "bathroom-1",
+            gender: "male",
+            availability: "available",
+            desireability: "blowed",
+            stats: {}
+        },
+        b2 : {
+            id: "bathroom-2",
+            gender: "male",
+            availability: "occupied",
+            desireability: "blowed",
+            stats: {}
+        },
+        b3 : {
+            id: "bathroom-3",
+            gender: "male",
+            availability: "reserved",
+            desireability: "blowed",
+            stats: {}
+        }
     },
-    "bathroom-2" : {
-        gender: "male",
-        availability: "occupied",
-        desireability: "blowed"
-    },
-    "bathroom-3" : {
-        gender: "male",
-        availability: "reserved",
-        desireability: "blowed"
-    }
+    active: ""
 }
 
 io.on('connection', function(socket) {
     console.log('connection');
     io.emit('init', JSON.stringify(wc));
+
+    var count = 0;
+
+    setInterval(function() {
+        var bathroom = {
+            b2 : {
+                gender: "male",
+                availability: (count++ % 2? "occupied": "available"),
+                desireability: "blowed",
+                id: "bathroom-2"
+            }
+        };
+console.log("timer emit");
+        io.emit('update', JSON.stringify(bathroom));
+    }, 30000);
+
 
     socket.on('update', function(msg) {
         console.log('update: ' + msg);

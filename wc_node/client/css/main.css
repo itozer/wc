@@ -24,9 +24,9 @@ h1 {
 }
 
 h2 {
-    font-size: 35px;
+    font-size: 28px;
     color: #fff;
-    font-weight: normal;
+    font-weight: bold;
 }
 
 h3 {
@@ -139,7 +139,8 @@ h3 {
     /*width: 20%;
     height: 60%;*/
     width: 169px;
-    height: 463px;
+    /*height: 463px;*/
+    height: 400px;
     margin: 0 auto;
     background-image: url("../images/mens_icon.png");
     background-repeat: no-repeat;

@@ -19,7 +19,7 @@
         socket = io();
 
         //add click event listeners to bathroom thumbs
-        bathrooms = document.querySelectorAll(".bathroom-thumb");
+        bathrooms = document.querySelectorAll(".bathroom-thumb-wrapper div");
         //bathrooms = document.querySelectorAll(".bathroom-thumb-wrapper");
         for (i = 0; i < bathrooms.length; i++) {
             setBathroomThumbEvents(bathrooms[i]);
@@ -48,8 +48,33 @@
 
         //app init socket
         socket.on('init', function(msg) {
+            var bathroom;
+
             wc = JSON.parse(msg);
-            updateStatus();
+
+            //check if client has cookie that remembers last selected bathroom
+            if (false) {
+                //set active from cookie
+            } else {
+                wc.active = wc.bathrooms.b1;
+            }
+
+            for (bathroom in wc.bathrooms) {
+                updateBathroomStatus(wc.bathrooms[bathroom]);
+            }
+        });
+
+        //bathroom status change
+        socket.on('update', function(msg) {
+console.log('update');
+            var bathroom = JSON.parse(msg), bathroomKey, prop
+            bathroomKey = Object.keys(bathroom)[0];
+            for (prop in bathroom[bathroomKey]) {
+                wc.bathrooms[bathroomKey][prop] = bathroom[bathroomKey][prop];
+            }
+            updateBathroomStatus(wc.bathrooms[bathroomKey], true);
+
+            document.getElementById("status").className = wc.active.availability;
         });
 
         setVacantTimer(0);
@@ -57,57 +82,56 @@
 
     //left nav click event
     function setActionEvents(el) {
-      el.addEventListener("click", function() {
-        socket.emit('action', el.id);
-        //doAnimation(el.querySelector("p"), "pulse", function() {
-        doAnimation(el, "pulse", function() {
-          //do something?
-        })
-      });
+        el.addEventListener("click", function() {
+            socket.emit('action', el.id);
+            doAnimation(el, "pulse", function() {
+                //do something?
+            })
+        });
     }
 
     function setBathroomThumbEvents(el) {
         el.addEventListener("click", function() {
-            var thumb = el.querySelector(".bathroom-thumb"), title = el.querySelector("p");
             removeClass(document.querySelector("#bathroom-nav .active"), "active");
-            //removeClass(document.querySelector(".active"), "active");
-            addClasses(el, "active animated tada");
-            /*addClass(el, "active");
-            addClasses(thumb, "animated tada");*/
-            one(el, ['webkitAnimationEnd', 'mozAnimationEnd', 'MSAnimationEnd', 'oanimationend', 'animationend']).then(function(el) {
-                //do something
-                console.log("done animating");
-                console.log(el);
-                removeClasses(el, "animated tada");
-            }).catch(function(e) {
-                console.log(e);
-            });
-
-            document.body.className = wc[el.parentNode.id].availability;
+            addClasses(el, "active");
+            setActiveBathroom(el.parentNode.id);
+            /*doAnimation(el, "tada", function() {
+                //on complete
+            });*/
         });
     }
 
-    function updateStatus() {
-        var bathroom, classList, status, thumb, title;
-
-        for (bathroom in wc) {
-            //update visual status of thumb
-            thumb = document.getElementById(bathroom).querySelector(".bathroom-thumb");
-            thumb.className.indexOf("active") === -1? classList = "": classList = "active ";
-            classList += wc[bathroom].availability + " " + wc[bathroom].desireability + " " + wc[bathroom].gender;
-            thumb.className = classList;
-
-            //add animation to text
-            title = document.getElementById(bathroom).querySelector("p");
-            one(title, ['webkitAnimationEnd', 'mozAnimationEnd', 'MSAnimationEnd', 'oanimationend', 'animationend']).then(function(el) {
-                //do something
-                console.log("done animating");
-                console.log(el);
-            }).catch(function(e) {
-                console.log(e);
-            });
-
+    function setActiveBathroom(id) {
+        var bathroom;
+        for (bathroom in wc.bathrooms) {
+            console.log(wc.bathrooms[bathroom].id);
+            if (wc.bathrooms[bathroom].id === id) {
+                wc.active = wc.bathrooms[bathroom];
+                break;
+            }
         }
+        //i will need to update visible stats here
+
+        //update main site color status
+        document.getElementById("status").className = wc.active.availability;
+    }
+
+    function updateBathroomStatus(bathroom, animate) {
+        var classList, status, thumb, title;
+
+        console.log(bathroom);
+        thumb = document.getElementById(bathroom.id).querySelector("div");
+        wc.active.id === bathroom.id? classList = "active ": classList = "";
+        classList += bathroom.availability + " " + bathroom.desireability + " " + bathroom.gender;
+        thumb.className = classList;
+
+        //add animation to thumb
+        if (animate) {
+            doAnimation(document.getElementById(bathroom.id), "tada", function() {
+                //on complete
+            });
+        }
+
     }
 
     function doAnimation(el, animation, cb) {
