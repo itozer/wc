@@ -8,11 +8,17 @@ var wcRouter = require('./wc');
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
+var mongoose = require('mongoose');
+
 app.use(morgan('dev'))
 app.use(express.static('client'));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use('/wc', wcRouter);
+
+
+//connect to db
+//mongoose.connect('mongodb://localhost/wc');
 
 /*
 app.get('/', function(req, res) {
