@@ -58,23 +58,28 @@
             } else {
                 wc.active = wc.bathrooms.b1;
             }
+            updateActiveBathroomPanel();
 
             for (bathroom in wc.bathrooms) {
-                updateBathroomStatus(wc.bathrooms[bathroom]);
+                updateBathroomThumb(wc.bathrooms[bathroom]);
             }
+
         });
 
         //bathroom status change
-        socket.on('update', function(msg) {
-console.log('update');
-            var bathroom = JSON.parse(msg), bathroomKey, prop
-            bathroomKey = Object.keys(bathroom)[0];
-            for (prop in bathroom[bathroomKey]) {
-                wc.bathrooms[bathroomKey][prop] = bathroom[bathroomKey][prop];
+        socket.on('update', function(msg, animate) {
+//console.log('update');
+//console.log(msg);
+            var bathroom = JSON.parse(msg), prop;
+            for (prop in bathroom) {
+                wc.bathrooms[bathroom.key][prop] = bathroom[prop];
             }
-            updateBathroomStatus(wc.bathrooms[bathroomKey], true);
+            updateBathroomThumb(wc.bathrooms[bathroom.key], animate);
 
-            document.getElementById("status").className = wc.active.availability;
+            //document.getElementById("status").className = wc.active.availability;
+            if (bathroom.id === wc.active.id) {
+                updateActiveBathroomPanel();
+            }
         });
 
         setVacantTimer(0);
@@ -83,17 +88,25 @@ console.log('update');
     //left nav click event
     function setActionEvents(el) {
         el.addEventListener("click", function() {
-            socket.emit('action', el.id);
+            socket.emit('action', JSON.stringify({action: el.id, bId: wc.active.id}));
+            /*
             doAnimation(el, "pulse", function() {
                 //do something?
             })
+            */
+        });
+        el.addEventListener("mouseover", function() {
+            addClass(this, "hover");
+        });
+        el.addEventListener("mouseout", function() {
+            removeClass(this, "hover");
         });
     }
 
     function setBathroomThumbEvents(el) {
         el.addEventListener("click", function() {
             removeClass(document.querySelector("#bathroom-nav .active"), "active");
-            addClasses(el, "active");
+            addClass(el, "active");
             setActiveBathroom(el.parentNode.id);
             /*doAnimation(el, "tada", function() {
                 //on complete
@@ -111,15 +124,20 @@ console.log('update');
             }
         }
         //i will need to update visible stats here
+        document.getElementById("center-bathroom-title").innerHTML = wc.active.title;
 
         //update main site color status
-        document.getElementById("status").className = wc.active.availability;
+        //is this the best place for this?
+        //document.getElementById("status").className = wc.active.availability;
+        updateActiveBathroomPanel()
     }
 
-    function updateBathroomStatus(bathroom, animate) {
+    function updateBathroomThumb(bathroom, animate) {
         var classList, status, thumb, title;
 
         console.log(bathroom);
+
+        //update thumb
         thumb = document.getElementById(bathroom.id).querySelector("div");
         wc.active.id === bathroom.id? classList = "active ": classList = "";
         classList += bathroom.availability + " " + bathroom.desireability + " " + bathroom.gender;
@@ -130,6 +148,22 @@ console.log('update');
             doAnimation(document.getElementById(bathroom.id), "tada", function() {
                 //on complete
             });
+        }
+    }
+
+    function updateActiveBathroomPanel() {
+//console.log(wc.active);
+        //updates site color based on availability
+        document.getElementById("status").className = wc.active.availability;
+
+        //updates center icon based on desireability
+        document.getElementById("center-gender").className = wc.active.desireability;
+
+        //updates center title based on desireability
+        if (wc.active.desireability === "blowed") {
+            document.getElementById("center-blowed").innerHTML = "(blowed&#128169;) ";
+        } else {
+            document.getElementById("center-blowed").innerHTML = "";
         }
 
     }

@@ -3,16 +3,28 @@
     margin: 0;
 }
 
+@font-face {
+    font-family: 'Glyphter';
+    src: url('../fonts/Glyphter.eot');
+    src: url('../fonts/Glyphter?#iefix') format('embedded-opentype'),
+         url('../fonts/Glyphter.woff') format('woff'),
+         url('../fonts/Glyphter.ttf') format('truetype'),
+         url('../fonts/Glyphter.svg#Glyphter') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
 html {
 	height: 100%;
 }
 
 body {
-  background: #02a651;
-	width: 100%;
-	height: 100%;
-	min-height: 100%;
-  font-family: 'Open Sans', arial;
+    background: #02a651;
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    font-family: 'Open Sans', arial;
+    transition: background-color 0.1s ease;
 }
 
 h1 {
@@ -83,6 +95,7 @@ h3 {
     background-repeat: no-repeat;
     border: 1px solid #ccc;
     cursor: pointer;
+    transition: background-color 0.2s ease;
 }
 
 #bathroom-nav > div {
@@ -142,11 +155,19 @@ h3 {
     /*height: 463px;*/
     height: 400px;
     margin: 0 auto;
-    background-image: url("../images/mens_icon.png");
+    /*background-image: url("../images/mens_icon_combined.png");*/
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center center;
     opacity: 0.4;
+}
+
+#center-gender.clean {
+    background-image: url("../images/mens_icon.png");
+}
+
+#center-gender.blowed {
+    background-image: url("../images/mens_icon_blowed.png");
 }
 
 #chat-container {
@@ -201,4 +222,36 @@ h3 {
 
 .male {
     background-image: url('../images/mens_icon.png');
+}
+
+
+
+.he-anchor,
+.he-anchor-label {
+    position: relative
+}
+.he-anchor-label {
+    z-index: 2
+}
+.he-anchor-background {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+    background-color: rgba(0, 104, 183, .2);
+    transition: opacity .15s cubic-bezier(.23, 1, .32, 1), visibility .15s cubic-bezier(.23, 1, .32, 1), -webkit-transform .3s cubic-bezier(.23, 1, .32, 1);
+    transition: opacity .15s cubic-bezier(.23, 1, .32, 1), visibility .15s cubic-bezier(.23, 1, .32, 1), transform .3s cubic-bezier(.23, 1, .32, 1)
+}
+.he-anchor.hover .he-anchor-background {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+    visibility: visible
+}
+.he-expand-trigger .he-anchor-background {
+    background-color: rgba(0, 0, 0, .1)
 }
