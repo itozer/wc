@@ -20,11 +20,11 @@
 
         //add click event listeners to bathroom thumbs
         bathrooms = document.querySelectorAll(".bathroom-thumb-wrapper div");
-        //bathrooms = document.querySelectorAll(".bathroom-thumb-wrapper");
         for (i = 0; i < bathrooms.length; i++) {
             setBathroomThumbEvents(bathrooms[i]);
         }
 
+        //add click event listeners to action buttons
         actions = document.querySelectorAll(".action-button");
         for (i = 0; i < actions.length; i++) {
             setActionEvents(actions[i]);
@@ -58,10 +58,11 @@
             } else {
                 wc.active = wc.bathrooms.b1;
             }
-            updateActiveBathroomPanel();
+            //updateActiveBathroomPanel();
 
             for (bathroom in wc.bathrooms) {
-                updateBathroomThumb(wc.bathrooms[bathroom]);
+                //updateBathroomThumb(wc.bathrooms[bathroom]);
+                drawBathroomState(bathroom, false);
             }
 
         });
@@ -70,20 +71,27 @@
         socket.on('update', function(msg, animate) {
 //console.log('update');
 //console.log(msg);
-            var bathroom = JSON.parse(msg), prop;
-            for (prop in bathroom) {
-                wc.bathrooms[bathroom.key][prop] = bathroom[prop];
-            }
-            updateBathroomThumb(wc.bathrooms[bathroom.key], animate);
-
-            //document.getElementById("status").className = wc.active.availability;
-            if (bathroom.id === wc.active.id) {
-                updateActiveBathroomPanel();
-            }
+            var bathroom = JSON.parse(msg);
+            setBathroomsState(bathroom);
+            drawBathroomState(bathroom, animate);
         });
 
         setVacantTimer(0);
     });
+
+    function setBathroomsState(bathroom) {
+        for (prop in bathroom) {
+            wc.bathrooms[bathroom.key][prop] = bathroom[prop];
+        }
+    }
+
+    function drawBathroomState(bathroom, animate) {
+        updateBathroomThumb(wc.bathrooms[bathroom.key], animate);
+
+        if (bathroom.id === wc.active.id) {
+            updateActiveBathroomPanel();
+        }
+    }
 
     //left nav click event
     function setActionEvents(el) {
@@ -108,9 +116,6 @@
             removeClass(document.querySelector("#bathroom-nav .active"), "active");
             addClass(el, "active");
             setActiveBathroom(el.parentNode.id);
-            /*doAnimation(el, "tada", function() {
-                //on complete
-            });*/
         });
     }
 
