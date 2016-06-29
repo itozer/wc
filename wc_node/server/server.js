@@ -35,6 +35,7 @@ var wc = {
             title: "Bathroom 1",
             gender: "male",
             availability: "available",
+            //reserved: false,
             desireability: "clean",
             stats: {}
         },
@@ -44,6 +45,7 @@ var wc = {
             title: "Bathroom 2",
             gender: "male",
             availability: "occupied",
+            //reserved: false,
             desireability: "clean",
             stats: {}
         },
@@ -53,6 +55,7 @@ var wc = {
             title: "Bathroom 3",
             gender: "male",
             availability: "reserved",
+            //reserved: true,
             desireability: "clean",
             stats: {}
         }
@@ -62,13 +65,14 @@ var wc = {
 
     var count = 0;
     setInterval(function() {
-        var bathroom = {
-            gender: "male",
-            availability: (count++ % 2? "occupied": "available"),
-            desireability: "clean",
+        /*var bathroom = {
             id: "bathroom-2",
-            key: "b2"
-        };
+            key: "b2",
+            availability: (count++ % 2? "occupied": "available"),
+        };*/
+        var bathroom = wc.bathrooms.b2;
+        bathroom.availability = (count++ % 2? "occupied": "available"),
+        //wc.bathrooms[bathroom.key].availability = bathroom.availability;
 console.log("timer emit");
         io.emit('update', JSON.stringify(bathroom), true);
     }, 30000);
@@ -93,7 +97,10 @@ io.on('connection', function(socket) {
                 });
                 break;
             case "reserved-button":
-                updateBathroom(message.bId, "availability", "reserved");
+                updateBathroom(message.bId, "availability", "reserved", function(b) {
+                    io.emit('update', JSON.stringify(b));
+                    setReservedCounter(b.id);
+                });
                 break;
             case "alert-button":
                 //not sure how i want to handle this yer
@@ -120,12 +127,12 @@ http.listen(3000);
 console.log('on port 3000');
 
 function updateBathroom(id, key, value, cb) {
-    var b, bKey, bValue;
-    for (b in wc.bathrooms) {
-        if (wc.bathrooms[b].id === id) {
-            wc.bathrooms[b][key] = value;
-            bKey = b;
-            bValue = wc.bathrooms[b];
+    var bathroom, bKey, bValue;
+    for (bathroom in wc.bathrooms) {
+        if (wc.bathrooms[bathroom].id === id) {
+            wc.bathrooms[bathroom][key] = value;
+            bKey = bathroom;
+            bValue = wc.bathrooms[bathroom];
             break;
         }
     }
@@ -136,6 +143,16 @@ function setBlowedCounter(id) {
     var minutes = 10;
     setTimeout(function() {
         updateBathroom(id, "desireability", "clean", function(b) {
+            io.emit('update', JSON.stringify(b));
+        });
+    //}, 1000 * 60 * minutes);
+    }, 5000);
+}
+
+function setReservedCounter(id) {
+    var minutes = 10;
+    setTimeout(function() {
+        updateBathroom(id, "availability", "available", function(b) {
             io.emit('update', JSON.stringify(b));
         });
     //}, 1000 * 60 * minutes);

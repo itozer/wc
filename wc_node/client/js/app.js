@@ -58,11 +58,9 @@
             } else {
                 wc.active = wc.bathrooms.b1;
             }
-            //updateActiveBathroomPanel();
 
             for (bathroom in wc.bathrooms) {
-                //updateBathroomThumb(wc.bathrooms[bathroom]);
-                drawBathroomState(bathroom, false);
+                paintBathroomState(wc.bathrooms[bathroom], false);
             }
 
         });
@@ -73,23 +71,24 @@
 //console.log(msg);
             var bathroom = JSON.parse(msg);
             setBathroomsState(bathroom);
-            drawBathroomState(bathroom, animate);
+            paintBathroomState(bathroom, animate);
         });
 
         setVacantTimer(0);
     });
 
     function setBathroomsState(bathroom) {
+        var prop
         for (prop in bathroom) {
             wc.bathrooms[bathroom.key][prop] = bathroom[prop];
         }
     }
 
-    function drawBathroomState(bathroom, animate) {
-        updateBathroomThumb(wc.bathrooms[bathroom.key], animate);
+    function paintBathroomState(bathroom, animate) {
+        paintBathroomThumb(bathroom, animate);
 
         if (bathroom.id === wc.active.id) {
-            updateActiveBathroomPanel();
+            paintActiveBathroomPanel();
         }
     }
 
@@ -116,36 +115,29 @@
             removeClass(document.querySelector("#bathroom-nav .active"), "active");
             addClass(el, "active");
             setActiveBathroom(el.parentNode.id);
+            paintActiveBathroomPanel()
         });
     }
 
     function setActiveBathroom(id) {
         var bathroom;
         for (bathroom in wc.bathrooms) {
-            console.log(wc.bathrooms[bathroom].id);
             if (wc.bathrooms[bathroom].id === id) {
                 wc.active = wc.bathrooms[bathroom];
                 break;
             }
         }
-        //i will need to update visible stats here
-        document.getElementById("center-bathroom-title").innerHTML = wc.active.title;
-
-        //update main site color status
-        //is this the best place for this?
-        //document.getElementById("status").className = wc.active.availability;
-        updateActiveBathroomPanel()
     }
 
-    function updateBathroomThumb(bathroom, animate) {
+    function paintBathroomThumb(bathroom, animate) {
         var classList, status, thumb, title;
 
-        console.log(bathroom);
+//console.log(bathroom);
 
         //update thumb
         thumb = document.getElementById(bathroom.id).querySelector("div");
         wc.active.id === bathroom.id? classList = "active ": classList = "";
-        classList += bathroom.availability + " " + bathroom.desireability + " " + bathroom.gender;
+        classList += bathroom.availability + " " + bathroom.desireability + " " + bathroom.gender + "-" + bathroom.desireability;
         thumb.className = classList;
 
         //add animation to thumb
@@ -156,20 +148,24 @@
         }
     }
 
-    function updateActiveBathroomPanel() {
+    function paintActiveBathroomPanel() {
 //console.log(wc.active);
         //updates site color based on availability
         document.getElementById("status").className = wc.active.availability;
 
         //updates center icon based on desireability
-        document.getElementById("center-gender").className = wc.active.desireability;
+        document.getElementById("center-gender").className = wc.active.gender + "-" + wc.active.desireability;
 
         //updates center title based on desireability
         if (wc.active.desireability === "blowed") {
-            document.getElementById("center-blowed").innerHTML = "(blowed&#128169;) ";
+            //document.getElementById("center-blowed").innerHTML = "(blowed&#128169;) ";
+            document.getElementById("center-blowed").innerHTML = "(blowed) ";
         } else {
             document.getElementById("center-blowed").innerHTML = "";
         }
+
+        //bathroom title
+        document.getElementById("center-bathroom-title").innerHTML = wc.active.title;
 
     }
 
@@ -184,6 +180,8 @@
           cb();
       }).catch(function(e) {
           console.log(e);
+          console.log("catch");
+          removeClasses(el, "animated " + animation);
           cb();
       });
     }

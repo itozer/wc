@@ -162,11 +162,11 @@ h3 {
     opacity: 0.4;
 }
 
-#center-gender.clean {
+#center-gender.male-clean {
     background-image: url("../images/mens_icon.png");
 }
 
-#center-gender.blowed {
+#center-gender.male-blowed {
     background-image: url("../images/mens_icon_blowed.png");
 }
 
@@ -220,10 +220,13 @@ h3 {
     background-color: #ff530d;
 }
 
-.male {
+.male-clean {
     background-image: url('../images/mens_icon.png');
 }
 
+.male-blowed {
+    background-image: url('../images/mens_icon_blowed.png');
+}
 
 
 .he-anchor,
