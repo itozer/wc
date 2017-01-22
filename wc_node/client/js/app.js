@@ -25,6 +25,7 @@
         }
 
         //add click event listeners to action buttons
+        //add mouse events to action buttons for animation
         actions = document.querySelectorAll(".action-button");
         for (i = 0; i < actions.length; i++) {
             setActionEvents(actions[i]);
@@ -102,10 +103,17 @@
             })
             */
         });
-        el.addEventListener("mouseover", function() {
+        el.addEventListener("mouseover", function(e) {
+            var buttonRect;
             addClass(this, "hover");
+
+            //calculate which side the user entered the button
+            buttonRect = this.getBoundingClientRect();
+console.log(e.clientX);
+console.log(e.clientY);
+console.log(buttonRect);
         });
-        el.addEventListener("mouseout", function() {
+        el.addEventListener("mouseout", function(e) {
             removeClass(this, "hover");
         });
     }
