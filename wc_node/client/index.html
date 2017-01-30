@@ -1,11 +1,10 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-	<title>WC</title>
+	<title>SkyDump</title>
 	<link rel="stylesheet" type="text/css" href="css/main.css">
 	<link rel="stylesheet" type="text/css" href="css/animate.css">
 	<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-	<script src="js/main.js"></script>
 	<script type="text/javascript" src="js/app.js"></script>
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
     <script type="text/javascript" src="js/polyfills/es6-promise.min.js"></script>
@@ -14,38 +13,16 @@
 
 <body id="status">
 
-<!--
-<div id="action_bar">
-	<div id="vacant_timer"></div>
-
-	<div id="reserved_button" class="button" onclick="javascript:makeReservation()">Make Reservation</div>
-	<div id="blowed_button" class="button" onclick="javascript:reportBlowed()">Report Blowed</div>
-	<div id="alert_button" class="button" onclick="javascript:alertWhenFree()">Alert When Free&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-	<div style="clear: both"></div>
-</div>
-
-<div id="wrapper">
-	<div id="mens_icon">
-		<div id="mens_img"><img src="images/blank.gif" width="169px" height="463px" alt="" /></div>
-		<h2 id="status_text">text</h2>
-	</div>
-</div>
--->
-
     <div id="action-nav">
         <h1 class="animated rubberBand">SkyDump <span style="font-size: 50%;">2.0</span></h1>
-        <div id="alert-button" class="action-button"><p style="display: inline-block;">Alert When Free</p><p style="font-family: Glyphter;font-size:24px; display: inline-block; transform: translate(5px, 3px); line-height: 30px;">W</p></div>
+        <!--<div id="alert-button" class="action-button"><p style="display: inline-block;">Alert When Free</p><p style="font-family: Glyphter;font-size:24px; display: inline-block; transform: translate(5px, 3px); line-height: 30px;">W</p></div>-->
         <div id="blowed-button" class="action-button"><p>Report Blowed</p></div>
         <div id="reserved-button" class="action-button"><p>Make Reservation</p></div>
-        <div id="show-stats" class="action-button">
-			<span class="action-anchor-label">See Stats</span>
-            <span class="action-anchor-background"></span>
+        <!--<div id="show-stats" class="action-button"><p>See Stats<p></div>-->
         </div>
     </div>
 
     <div id="bathroom-nav">
-        <!--<div id="bathroom-nav-active"></div>-->
-
         <div id="bathroom-1" class="bathroom-thumb-wrapper">
             <div class="active"></div>
             <p>Bathroom 1</p>
@@ -68,8 +45,8 @@
 					<div id="center-gender"></div>
 					<h3 id="center-bathroom-title">Bathroom 1</h3>
 					<h2 id="center-status">Available <span id="center-blowed"></span>for <span id="vacant-timer">00:00</span></h2>
-					<h3 id="longest-dump">Longest Dump Today: 12:34</h3>
-					<h3 id="collective-time-today">Cumulative time: 54:16</h3>
+					<!--<h3 id="longest-dump">Longest Dump Today: 12:34</h3>
+					<h3 id="collective-time-today">Cumulative time: 54:16</h3>-->
 				</div>
 
         <div id="chat-container"></div>

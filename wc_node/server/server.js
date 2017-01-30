@@ -16,17 +16,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use('/wc', wcRouter);
 
-
-//connect to db
-//mongoose.connect('mongodb://localhost/wc');
-
-/*
-app.get('/', function(req, res) {
-    //res.sendFile(__dirname + '/../client/index.html');
-    res.sendFile('/home/isaac/development/wc/wc_node/client/index.html');
-});
-*/
-
+//for demo just store state in memory
 var wc = {
     bathrooms: {
         b1 : {
@@ -35,7 +25,11 @@ var wc = {
             title: "Bathroom 1",
             gender: "male",
             availability: "available",
-            //reserved: false,
+            availabilityTime: Date.now(),
+            reservedTime: 0,
+            reservedCountdownTime: (30 * 1000),
+            blowedTime: 0,
+            blowedCountdownTime: (10 * 60 * 1000),
             desireability: "clean",
             stats: {}
         },
@@ -45,7 +39,11 @@ var wc = {
             title: "Bathroom 2",
             gender: "male",
             availability: "occupied",
-            //reserved: false,
+            availabilityTime: Date.now(),
+            reservedTime: 0,
+            reservedCountdownTime: (30 * 60 * 1000),
+            blowedTime: 0,
+            blowedCountdownTime: (10 * 60 * 1000),
             desireability: "clean",
             stats: {}
         },
@@ -54,29 +52,39 @@ var wc = {
             key: "b3",
             title: "Bathroom 3",
             gender: "male",
-            availability: "reserved",
-            //reserved: true,
+            availability: "available",
+            availabilityTime: Date.now(),
+            reservedTime: 0,
+            reservedCountdownTime: (30 * 60 * 1000),
+            blowedTime: 0,
+            blowedCountdownTime: (10 * 60 * 1000),
             desireability: "clean",
             stats: {}
         }
     },
-    active: ""
+    active: "",
 }
 
-    var count = 0;
-    setInterval(function() {
-        /*var bathroom = {
-            id: "bathroom-2",
-            key: "b2",
-            availability: (count++ % 2? "occupied": "available"),
-        };*/
-        var bathroom = wc.bathrooms.b2;
-        bathroom.availability = (count++ % 2? "occupied": "available"),
-        //wc.bathrooms[bathroom.key].availability = bathroom.availability;
-console.log("timer emit");
-        io.emit('update', JSON.stringify(bathroom), true);
-    }, 30000);
+init();
 
+function init() {
+    //simulate bathroom state change
+    setInterval(function() {
+        var bathroom = wc.bathrooms["b" + getRandomInt(1,3)];
+        if (bathroom.availability === "available") {
+            bathroom.availability = "occupied";
+        } else {
+            bathroom.availability = "available";
+            bathroom.availabilityTime = Date.now();
+        }
+        console.log(bathroom);
+        io.emit('update', JSON.stringify(bathroom), true);
+    }, 5000);
+}
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min +1) + min);
+}
 
 io.on('connection', function(socket) {
     console.log('connection');
@@ -87,23 +95,27 @@ io.on('connection', function(socket) {
     });
 
     socket.on('action', function(msg) {
-        console.log('action: ' + msg);
         var message = JSON.parse(msg);
+        var bathroom = message.bathroom;
+        console.log('action: ' + msg);
+        console.log(message.action);
         switch(message.action) {
             case "blowed-button":
-                updateBathroom(message.bId, "desireability", "blowed", function(b) {
+console.log("case blowed");
+                updateBathroom(bathroom.id, "desireability", "blowed", function(b) {
+                    setBlowedCounter(b);
                     io.emit('update', JSON.stringify(b));
-                    setBlowedCounter(b.id);
                 });
                 break;
             case "reserved-button":
-                updateBathroom(message.bId, "availability", "reserved", function(b) {
+console.log("case reserved");
+                updateBathroom(bathroom.id, "availability", "reserved", function(b) {
+                    setReservedCounter(b);
                     io.emit('update', JSON.stringify(b));
-                    setReservedCounter(b.id);
                 });
                 break;
             case "alert-button":
-                //not sure how i want to handle this yer
+                //not sure how i want to handle this yet
                 break;
         }
     });
@@ -123,10 +135,13 @@ app.use(function(err, req, res, next) {
 });
 
 /*app.listen(3000);*/
+//http.listen(3000);
+//console.log('on port 3000');
 http.listen(3000);
 console.log('on port 3000');
 
 function updateBathroom(id, key, value, cb) {
+//console.log("updateBathroom: id=" + id);
     var bathroom, bKey, bValue;
     for (bathroom in wc.bathrooms) {
         if (wc.bathrooms[bathroom].id === id) {
@@ -139,22 +154,22 @@ function updateBathroom(id, key, value, cb) {
     cb(bValue);
 }
 
-function setBlowedCounter(id) {
-    var minutes = 10;
+function setBlowedCounter(bathroom) {
+    console.log("setBlowedCounter");
+    bathroom.blowedTime = Date.now();
     setTimeout(function() {
-        updateBathroom(id, "desireability", "clean", function(b) {
+        updateBathroom(bathroom.id, "desireability", "clean", function(b) {
             io.emit('update', JSON.stringify(b));
         });
-    //}, 1000 * 60 * minutes);
-    }, 5000);
+    }, bathroom.blowedCountdownTime);
 }
 
-function setReservedCounter(id) {
-    var minutes = 10;
+function setReservedCounter(bathroom) {
+    console.log("setReservedCounter");
+    bathroom.reservedTime = Date.now();
     setTimeout(function() {
-        updateBathroom(id, "availability", "available", function(b) {
+        updateBathroom(bathroom.id, "availability", "available", function(b) {
             io.emit('update', JSON.stringify(b));
         });
-    //}, 1000 * 60 * minutes);
-    }, 5000);
+    }, bathroom.reservedCountdownTime);
 }

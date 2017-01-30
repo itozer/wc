@@ -3,7 +3,7 @@
 
     var wc,       //holds state for all bathrooms
         socket,    //web socket (socket.io)
-        vacantTimer;
+        vacantTimer = setInterval(setAppTimer, 1000);
 
     function ready(fn) {
         if (document.readyState !== "loading") {
@@ -71,14 +71,13 @@
 //console.log('update');
 //console.log(msg);
             var bathroom = JSON.parse(msg);
-            setBathroomsState(bathroom);
+            setBathroomState(bathroom);
             paintBathroomState(bathroom, animate);
         });
 
-        setVacantTimer(0);
     });
 
-    function setBathroomsState(bathroom) {
+    function setBathroomState(bathroom) {
         var prop
         for (prop in bathroom) {
             wc.bathrooms[bathroom.key][prop] = bathroom[prop];
@@ -95,27 +94,22 @@
 
     //left nav click event
     function setActionEvents(el) {
-        el.addEventListener("click", function() {
-            socket.emit('action', JSON.stringify({action: el.id, bId: wc.active.id}));
+        el.addEventListener("click", function(e) {
+            socket.emit('action', JSON.stringify({action: el.id, bathroom: wc.active}));
             /*
             doAnimation(el, "pulse", function() {
                 //do something?
             })
             */
         });
+        /*
         el.addEventListener("mouseover", function(e) {
-            var buttonRect;
             addClass(this, "hover");
-
-            //calculate which side the user entered the button
-            buttonRect = this.getBoundingClientRect();
-console.log(e.clientX);
-console.log(e.clientY);
-console.log(buttonRect);
         });
         el.addEventListener("mouseout", function(e) {
             removeClass(this, "hover");
         });
+        */
     }
 
     function setBathroomThumbEvents(el) {
@@ -157,7 +151,6 @@ console.log(buttonRect);
     }
 
     function paintActiveBathroomPanel() {
-//console.log(wc.active);
         //updates site color based on availability
         document.getElementById("status").className = wc.active.availability;
 
@@ -166,14 +159,41 @@ console.log(buttonRect);
 
         //updates center title based on desireability
         if (wc.active.desireability === "blowed") {
-            //document.getElementById("center-blowed").innerHTML = "(blowed&#128169;) ";
-            document.getElementById("center-blowed").innerHTML = "(blowed) ";
+            //document.getElementById("center-blowed").innerHTML = "(blowed) ";
+            document.querySelector("#blowed-button p").innerHTML = "Blowed ()";
         } else {
-            document.getElementById("center-blowed").innerHTML = "";
+            //document.getElementById("center-blowed").innerHTML = "";
         }
 
         //bathroom title
         document.getElementById("center-bathroom-title").innerHTML = wc.active.title;
+
+/*
+        //vacant timer
+        if (wc.active.availability === "available") {
+            document.getElementById("vacant-timer").innerHTML = getTimePassed(wc.active.availabilityTime);
+            setTimeout(function(){document.getElementById("center-status").style.display = "block";},0);
+        } else {
+            setTimeout(function(){document.getElementById("center-status").style.display = "none";},0);
+        }
+
+        //reserved timer
+        if (wc.active.availability === "reserved") {
+            document.querySelector("reserved-button p").innerHTML = "Reserved (" + getTimePassed(wc.active.reservedTime) + ")";
+        } else {
+            document.querySelector("reserved-button p").innerHTML = "Make Reservation";
+        }
+
+        //desireability timer
+        if (wc.active.availability === "blowed") {
+            document.querySelector("blowed-button p").innerHTML = "Blowed (" + getTimePassed(wc.active.blowedTime) + ")";
+        } else {
+            document.querySelector("reserved-button p").innerHTML = "Report Blowed";
+        }
+
+*/
+
+        setAppTimer();
 
     }
 
@@ -215,31 +235,58 @@ console.log(buttonRect);
         });
     }
 
-    function setVacantTimer(totalSecondsPassed) {
-        vacantTimer = setInterval(function () {
-            var days, hours, minutes, seconds, secondsPassed, timePassed;
+    function setAppTimer() {
+        //vacant timer
+        if (wc.active.availability === "available") {
+            document.getElementById("vacant-timer").innerHTML = getTimePassed(wc.active.availabilityTime);
+            setTimeout(function(){document.getElementById("center-status").style.display = "block";},0);
+        } else {
+            setTimeout(function(){document.getElementById("center-status").style.display = "none";},0);
+        }
 
-            var days = parseInt(totalSecondsPassed / 86400);
-            var secondsPassed = parseInt(totalSecondsPassed % 86400);
-            var hours = parseInt(secondsPassed / 3600);
-            var secondsPassed = parseInt(secondsPassed % 3600);
-            var minutes = parseInt(secondsPassed / 60);
-            var seconds = parseInt(secondsPassed % 60);
-            var minutes = minutes < 10? "0" + minutes: minutes;
-            var seconds = seconds < 10? "0" + seconds: seconds;
+        //reserved timer
+        if (wc.active.availability === "reserved") {
+            document.querySelector("#reserved-button p").innerHTML = "Reserved (" + getTimePassed(wc.active.reservedTime, wc.active.reservedCountdownTime) + ")";
+        } else {
+            document.querySelector("#reserved-button p").innerHTML = "Make Reservation";
+        }
 
-            if (days > 0) {
-                timePassed = days + ":" + hours + ":" + minutes + ":" + seconds;
-            } else if (hours > 0) {
-                timePassed = hours + ":" + minutes + ":" + seconds;
-            } else {
-                timePassed = minutes + ":" + seconds;
-            }
+        //desireability timer
+        if (wc.active.desireability === "blowed") {
+            document.querySelector("#blowed-button p").innerHTML = "Blowed (" + getTimePassed(wc.active.blowedTime, wc.active.blowedCountdownTime) + ")";
+        } else {
+            document.querySelector("#blowed-button p").innerHTML = "Report Blowed";
+        }
 
-            document.getElementById("vacant-timer").innerHTML = timePassed;
-            totalSecondsPassed++;
+    }
 
-        }, 1000);
+    function getTimePassed(startTime, getTimeLeft) {
+        var days, hours, minutes, seconds, secondsPassed, timePassed, totalMillisecondsPassed, totalSecondsPassed;
+
+        //totalSecondsPassed = Math.floor((Date.now() - wc.active.availabilityTime) / 1000);
+        totalMillisecondsPassed =  Date.now() - startTime ;
+        if (getTimeLeft !== undefined) {
+            totalMillisecondsPassed = getTimeLeft - totalMillisecondsPassed;
+        }
+        totalSecondsPassed = Math.floor(totalMillisecondsPassed / 1000);
+        days = parseInt(totalSecondsPassed / 86400);
+        secondsPassed = parseInt(totalSecondsPassed % 86400);
+        hours = parseInt(secondsPassed / 3600);
+        secondsPassed = parseInt(secondsPassed % 3600);
+        minutes = parseInt(secondsPassed / 60);
+        seconds = parseInt(secondsPassed % 60);
+        minutes = minutes < 10? "0" + minutes: minutes;
+        seconds = seconds < 10? "0" + seconds: seconds;
+
+        if (days > 0) {
+            timePassed = days + ":" + hours + ":" + minutes + ":" + seconds;
+        } else if (hours > 0) {
+            timePassed = hours + ":" + minutes + ":" + seconds;
+        } else {
+            timePassed = minutes + ":" + seconds;
+        }
+
+        return timePassed;
     }
 
     function hasClass(el, className) {
