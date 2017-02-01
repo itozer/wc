@@ -13,64 +13,30 @@
   /* Small Devices, Tablets */
   @media only screen and (max-width : 768px) {
 
-      h1 {
-          font-size: 30px;
-      }
-
-      h2 {
-          font-size: 22px;
-      }
-
-      h3 {
-          font-size: 14px;
-      }
-
-      #action-nav {
-          height: 56px;
-      }
-
-      #action-nav .action-button {
-          width: 140px;
-          height: 40px;
-          font-size: 11px;
-          line-height: 40px;
-          margin: 8px 8px 0 0;
-      }
-
-      #bathroom-nav div div {
-          width: 176px;
-          height: 112px;
-      }
-
-      #bathroom-nav {
-          width: 240px;
-          height: calc(100% - 56px);
-      }
-
-      #info-panel {
-          width: calc(100% - 240px);
-          height: calc(100% - 106px);
-      }
-
-      #chat-bar {
-          width: calc(100% - 240px);
-          height: 40px;
-      }
-
-      #chat-bar input {
-          height: 20px;
-          font-size: 12px;
-      }
-
-      #center-gender {
-          width: 135px;
-          height: 320px;
-      }
-
   }
 
   /* Extra Small Devices, Phones */
   @media only screen and (max-width : 480px) {
+
+      #bathroom-nav {
+          width: 100%;
+      }
+
+      #info-panel {
+          display: none;
+      }
+
+      #chat-bar {
+          display: none;
+      }
+
+     #action-nav .action-button {
+         display: none;
+     }
+
+    #title-wrapper {
+        width: 100%;
+    }
 
   }
 

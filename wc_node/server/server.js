@@ -37,7 +37,7 @@ var wc = {
             id: "bathroom-2",
             key: "b2",
             title: "Bathroom 2",
-            gender: "male",
+            gender: "female",
             availability: "occupied",
             availabilityTime: Date.now(),
             reservedTime: 0,

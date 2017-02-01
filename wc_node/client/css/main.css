@@ -53,7 +53,7 @@ input:focus {
 
 #action-nav {
     width: 100%;
-    height: 9%;
+    height: 10%;
     background-color: rgba(0, 0, 0, 0.5);
     position: relative;
 }
@@ -71,6 +71,7 @@ input:focus {
 
 #title-wrapper {
     width: 25%;
+    width: 33%;
     height: 100%;
     float: left;
     display: flex;
@@ -81,7 +82,8 @@ input:focus {
 #action-wrapper .action-button {
     float: right;
     background-color: rgba(250, 250, 250, 0.9);
-    width: 14%;
+    width: 16%;
+    max-width: 216px;
     height: 100%;
     margin: 0 1% 0 0;
     text-align: center;
@@ -93,11 +95,9 @@ input:focus {
 }
 
 #bathroom-nav {
-    width: 25%;
+    width: 33%;
     position: relative;
-    /*width: 300px;*/
-    margin-bottom: -70px;
-    height: 91%;
+    height: 90%;
     background-color: rgba(255, 255, 255, 0.5);
     float: left;
     overflow-y: auto;
@@ -110,8 +110,8 @@ input:focus {
 
 /*thumb*/
 #bathroom-nav div div {
-    width: 65%;
-    padding-top: 45%;
+    width: 60%;
+    padding-top: 38%;
     margin: 0 auto;
     background-position: center center;
     background-size: 12%;
@@ -149,7 +149,8 @@ input:focus {
 
 #info-panel {
     width: 75%;
-    height: 91%;
+    width: 67%;
+    height: 90%;
     float: left;
     display: flex;
     align-items: center;
@@ -168,8 +169,8 @@ input:focus {
 }
 
 #center-gender {
-    width: 30%;
-    padding-top: 50%;
+    width: 35%;
+    padding-top: 55%;
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center center;
@@ -187,7 +188,7 @@ input:focus {
 #chat-container {
     position: absolute;
     bottom: 7%;
-    left: 25%;;
+    left: 33%;;
     font-size: 14px;
     color: #fff;
     text-align: left;
@@ -206,6 +207,7 @@ input:focus {
 
 #chat-bar {
     width: 75%;
+    width: 67%;
     height: 7%;
     position: absolute;
     bottom: 0;
@@ -242,6 +244,14 @@ input:focus {
 
 .male-blowed {
     background-image: url('../images/mens_icon_blowed.png');
+}
+
+.female-clean {
+    background-image: url('../images/womans_icon.png');
+}
+
+.female-blowed {
+    background-image: url('../images/womans_icon_blowed.png');
 }
 
 
