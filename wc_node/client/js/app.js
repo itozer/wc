@@ -168,33 +168,8 @@
         //bathroom title
         document.getElementById("center-bathroom-title").innerHTML = wc.active.title;
 
-/*
-        //vacant timer
-        if (wc.active.availability === "available") {
-            document.getElementById("vacant-timer").innerHTML = getTimePassed(wc.active.availabilityTime);
-            setTimeout(function(){document.getElementById("center-status").style.display = "block";},0);
-        } else {
-            setTimeout(function(){document.getElementById("center-status").style.display = "none";},0);
-        }
-
-        //reserved timer
-        if (wc.active.availability === "reserved") {
-            document.querySelector("reserved-button p").innerHTML = "Reserved (" + getTimePassed(wc.active.reservedTime) + ")";
-        } else {
-            document.querySelector("reserved-button p").innerHTML = "Make Reservation";
-        }
-
-        //desireability timer
-        if (wc.active.availability === "blowed") {
-            document.querySelector("blowed-button p").innerHTML = "Blowed (" + getTimePassed(wc.active.blowedTime) + ")";
-        } else {
-            document.querySelector("reserved-button p").innerHTML = "Report Blowed";
-        }
-
-*/
-
+        //displays appropriate timers
         setAppTimer();
-
     }
 
     function doAnimation(el, animation, cb) {
