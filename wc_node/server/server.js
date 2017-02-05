@@ -17,6 +17,7 @@ app.use(bodyParser.json());
 app.use('/wc', wcRouter);
 
 //for demo just store state in memory
+//production need db to store date
 var wc = {
     bathrooms: {
         b1 : {
@@ -71,13 +72,13 @@ function init() {
     //simulate bathroom state change
     setInterval(function() {
         var bathroom = wc.bathrooms["b" + getRandomInt(1,3)];
-        if (bathroom.availability === "available") {
+        if (bathroom.availability === "available" || bathroom.availability === "reserved") {
             bathroom.availability = "occupied";
         } else {
             bathroom.availability = "available";
             bathroom.availabilityTime = Date.now();
         }
-        console.log(bathroom);
+//console.log(bathroom);
         io.emit('update', JSON.stringify(bathroom), true);
     }, 5000);
 }
@@ -87,32 +88,36 @@ function getRandomInt(min, max) {
 }
 
 io.on('connection', function(socket) {
-    console.log('connection');
+//console.log('connection');
     io.emit('init', JSON.stringify(wc));
 
     socket.on('update', function(msg) {
-        console.log('update: ' + msg);
+//console.log('update: ' + msg);
     });
 
     socket.on('action', function(msg) {
         var message = JSON.parse(msg);
         var bathroom = message.bathroom;
-        console.log('action: ' + msg);
-        console.log(message.action);
+//console.log('action: ' + msg);
+//console.log(message.action);
         switch(message.action) {
             case "blowed-button":
-console.log("case blowed");
-                updateBathroom(bathroom.id, "desireability", "blowed", function(b) {
-                    setBlowedCounter(b);
-                    io.emit('update', JSON.stringify(b));
-                });
+//console.log("case blowed");
+                if (wc.bathrooms[bathroom.key].desireability === "clean") {
+                    updateBathroom(bathroom.id, "desireability", "blowed", function(b) {
+                        setBlowedCounter(b);
+                        io.emit('update', JSON.stringify(b));
+                    });
+                }
                 break;
             case "reserved-button":
-console.log("case reserved");
-                updateBathroom(bathroom.id, "availability", "reserved", function(b) {
-                    setReservedCounter(b);
-                    io.emit('update', JSON.stringify(b));
-                });
+//console.log("case reserved");
+                if (wc.bathrooms[bathroom.key].availability === "available") {
+                    updateBathroom(bathroom.id, "availability", "reserved", function(b) {
+                        setReservedCounter(b);
+                        io.emit('update', JSON.stringify(b));
+                    });
+                }
                 break;
             case "alert-button":
                 //not sure how i want to handle this yet

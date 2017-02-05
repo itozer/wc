@@ -96,20 +96,7 @@
     function setActionEvents(el) {
         el.addEventListener("click", function(e) {
             socket.emit('action', JSON.stringify({action: el.id, bathroom: wc.active}));
-            /*
-            doAnimation(el, "pulse", function() {
-                //do something?
-            })
-            */
         });
-        /*
-        el.addEventListener("mouseover", function(e) {
-            addClass(this, "hover");
-        });
-        el.addEventListener("mouseout", function(e) {
-            removeClass(this, "hover");
-        });
-        */
     }
 
     function setBathroomThumbEvents(el) {
@@ -157,19 +144,15 @@
         //updates center icon based on desireability
         document.getElementById("center-gender").className = wc.active.gender + "-" + wc.active.desireability;
 
-        //updates center title based on desireability
-        if (wc.active.desireability === "blowed") {
-            //document.getElementById("center-blowed").innerHTML = "(blowed) ";
-            document.querySelector("#blowed-button p").innerHTML = "Blowed ()";
-        } else {
-            //document.getElementById("center-blowed").innerHTML = "";
-        }
-
         //bathroom title
         document.getElementById("center-bathroom-title").innerHTML = wc.active.title;
 
         //displays appropriate timers
         setAppTimer();
+
+        //sets appropriate state for action buttons
+        document.getElementById("reserved-button").setAttribute("data-status", wc.active.availability);
+        document.getElementById("blowed-button").setAttribute("data-status", wc.active.desireability);
     }
 
     function doAnimation(el, animation, cb) {
@@ -238,8 +221,8 @@
     function getTimePassed(startTime, getTimeLeft) {
         var days, hours, minutes, seconds, secondsPassed, timePassed, totalMillisecondsPassed, totalSecondsPassed;
 
-        //totalSecondsPassed = Math.floor((Date.now() - wc.active.availabilityTime) / 1000);
         totalMillisecondsPassed =  Date.now() - startTime ;
+        if (totalMillisecondsPassed < 0) { totalMillisecondsPassed = 0; }
         if (getTimeLeft !== undefined) {
             totalMillisecondsPassed = getTimeLeft - totalMillisecondsPassed;
         }
