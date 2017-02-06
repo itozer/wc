@@ -120,9 +120,6 @@
 
     function paintBathroomThumb(bathroom, animate) {
         var classList, status, thumb, title;
-
-//console.log(bathroom);
-
         //update thumb
         thumb = document.getElementById(bathroom.id).querySelector("div");
         wc.active.id === bathroom.id? classList = "active ": classList = "";

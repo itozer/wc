@@ -26,6 +26,7 @@ body {
     min-height: 100%;
     font-family: 'Open Sans', arial;
     transition: background-color 0.1s ease;
+    overflow: hidden;
 }
 
 h1 {
@@ -133,7 +134,7 @@ input:focus {
 }
 
 /*thumb*/
-#bathroom-nav div div {
+#bathroom-nav .bathroom-thumb-wrapper div {
     width: 60%;
     padding-top: 38%;
     margin: 0 auto;
@@ -143,6 +144,7 @@ input:focus {
     border: 1px solid #ccc;
     cursor: pointer;
     transition: background-color 0.2s ease;
+    position: relative;
 }
 
 #bathroom-nav > div {
@@ -153,17 +155,55 @@ input:focus {
     border: 1px solid #fff;
 }
 
-/*active arrow triangle indicator*/
-#bathroom-nav-active {
-	width: 0;
-    height: 0;
-    border-top: 25px solid transparent;
-    border-left: 25px solid #02a651;
-    border-bottom: 25px solid transparent;
+#bathroom-nav .bathroom-thumb-wrapper div .active-arrow-wrapper {
+    display: none;
+}
+
+#bathroom-nav .bathroom-thumb-wrapper div.active .active-arrow-wrapper {
     position: absolute;
-    z-index: 2;
-    left: 0;
-    top: 43px;
+    top: 0;
+    right: -18%;
+    width: 15%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    border: none;
+    background-clip: content-box;
+    overflow: hidden;
+}
+
+/*active arrow triangle indicator*/
+#bathroom-nav .bathroom-thumb-wrapper div.active .active-arrow {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+
+#bathroom-nav .bathroom-thumb-wrapper div.active .active-arrow div {
+    width: 100%;
+    padding-top: 132%;
+    border: 0;
+    -webkit-transform-origin: 0 100%;
+    -ms-transform-origin: 0 100%;
+    transform-origin: 0 100%;
+    -webkit-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+}
+
+#bathroom-nav .bathroom-thumb-wrapper div.active.available .active-arrow div {
+    background-color: #015228;
+}
+
+#bathroom-nav .bathroom-thumb-wrapper div.active.occupied .active-arrow div {
+    background-color: #6b0d00;
+}
+
+#bathroom-nav .bathroom-thumb-wrapper div.active.reserved .active-arrow div {
+    background-color: #7f2906;
 }
 
 #bathroom-nav p {
