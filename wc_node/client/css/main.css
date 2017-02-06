@@ -141,7 +141,7 @@ input:focus {
     background-position: center center;
     background-size: 12%;
     background-repeat: no-repeat;
-    border: 1px solid #ccc;
+    /*border: 1px solid #ccc;*/
     cursor: pointer;
     transition: background-color 0.2s ease;
     position: relative;
@@ -232,9 +232,13 @@ input:focus {
     text-align: center;
 }
 
+#gender-wrapper {
+    width: 45%;
+}
+
 #center-gender {
-    width: 35%;
-    padding-top: 55%;
+    width: 100%;
+    padding-top: 100%;
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center center;
